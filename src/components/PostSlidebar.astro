@@ -1,5 +1,6 @@
 ---
 import * as interfaces from '../lib/interfaces.ts'
+import BlogPageLink from './BlogPageLink.astro'
 import BlogPostsLink from './BlogPostsLink.astro'
 
 export interface Props {
@@ -22,4 +23,5 @@ const { allPosts, currentPost, postsHavingSameTag, showSameTagPosts = false } = 
         />
     )}
   <BlogPostsLink heading="Recent Posts" posts={allPosts} />
+  <BlogPageLink />
 </div>
