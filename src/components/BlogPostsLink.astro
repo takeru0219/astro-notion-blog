@@ -13,6 +13,7 @@ const { heading, posts } = Astro.props
 
 <div class="blog-posts-link">
   <h2>{heading}</h2>
+  <div class="content-wrapper">
   {
     posts.length === 0 ? (
       <NoContents contents={posts} />
@@ -24,31 +25,38 @@ const { heading, posts } = Astro.props
               href={getPostLink(post.Slug)}
               title={`${post.Icon?.Emoji || ''}${post.Title}`}
             >
-              {post.Icon && post.Icon.Type === 'emoji' ? (
-                <>
-                  <span>{post.Icon.Emoji}</span>
+              <div class="post-link-content">
+                <div class="post-title">
+                  {post.Icon && post.Icon.Type === 'emoji' ? (
+                    <span>{post.Icon.Emoji}</span>
+                  ) : post.Icon && post.Icon.Type === 'external' ? (
+                    <img
+                      src={post.Icon.Url}
+                      alt="Post title icon in a link list"
+                    />
+                  ) : null}
                   {post.Title}
-                </>
-              ) : post.Icon && post.Icon.Type === 'external' ? (
-                <>
-                  <img
-                    src={post.Icon.Url}
-                    alt="Post title icon in a link list"
-                  />
-                  {post.Title}
-                </>
-              ) : (
-                post.Title
-              )}
+                </div>
+                <div class="post-tags">
+                  {post.Tags.map((tag) => (
+                    <span class={`tag ${tag.color}`}>{tag.name}</span>
+                  ))}
+                </div>
+              </div>
             </a>
           </li>
         ))}
       </ul>
     )
   }
+  </div>
 </div>
 
 <style>
+  .content-wrapper {
+    margin-top: 0.4rem;
+    margin-block-end: 1rem;
+  }
   .blog-posts-link {
   }
   .blog-posts-link h2 {
@@ -60,8 +68,7 @@ const { heading, posts } = Astro.props
   .blog-posts-link ul {
     list-style-type: none;
     padding: 0;
-    margin-top: 0.4rem;
-    margin-block-end: 1rem;
+    margin: 0;
   }
   .blog-posts-link ul li {
   }
@@ -89,4 +96,29 @@ const { heading, posts } = Astro.props
     height: 1.25rem;
     vertical-align: sub;
   }
+
+  .post-link-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .post-title {
+    flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .post-tags {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+    margin-left: 8px;
+  }
+  .tag {
+    font-size: 0.8em;
+    padding: 2px 6px;
+    border-radius: 3px;
+    background-color: #f0f0f0;
+  }
+</style>
 </style>

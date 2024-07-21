@@ -1,0 +1,25 @@
+---
+import * as interfaces from '../lib/interfaces.ts'
+import BlogPostsLink from './BlogPostsLink.astro'
+
+export interface Props {
+  currentPost?: interfaces.Post
+  postsHavingSameTag?: interfaces.Post[]
+  allPosts: interfaces.Post[]
+  showSameTagPosts: boolean
+}
+
+const { allPosts, currentPost, postsHavingSameTag, showSameTagPosts = false } = Astro.props
+---
+
+<div class="aside">
+    {showSameTagPosts && postsHavingSameTag && currentPost && (
+        <BlogPostsLink
+        heading="Posts in the same category"
+        posts={postsHavingSameTag.filter(
+            (p: interfaces.Post) => p.Slug !== currentPost.Slug
+        )}
+        />
+    )}
+  <BlogPostsLink heading="Recent Posts" posts={allPosts} />
+</div>

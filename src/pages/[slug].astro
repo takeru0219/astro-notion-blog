@@ -1,0 +1,93 @@
+---
+import { NUMBER_OF_POSTS_PER_PAGE, PROFILE_PAGE_ID, PROFILE_PAGE_ID_EN } from '../server-constants.ts'
+import {
+  getPosts,
+  getRankedPosts,
+  getAllTags,
+  getNumberOfPages,
+  getAllBlocksByBlockId,
+} from '../lib/notion/client.ts'
+import Layout from '../layouts/Layout.astro'
+import NoContents from '../components/NoContents.astro'
+import PostBody from '../components/PostBody.astro'
+import PostDate from '../components/PostDate.astro'
+import PostTags from '../components/PostTags.astro'
+import PostTitle from '../components/PostTitle.astro'
+import PostSlidebar from '../components/PostSlidebar.astro'
+import PostFeaturedImage from '../components/PostFeaturedImage.astro'
+import PostExcerpt from '../components/PostExcerpt.astro'
+import ReadMoreLink from '../components/ReadMoreLink.astro'
+import Pagination from '../components/Pagination.astro'
+import BlogPostsLink from '../components/BlogPostsLink.astro'
+import BlogTagsLink from '../components/BlogTagsLink.astro'
+import styles from '../styles/blog.module.css'
+
+const [posts, rankedPosts, tags, numberOfPages, profileJapanesePageBlocks, profileEnglishPageBlocks] = await Promise.all([
+  getPosts(NUMBER_OF_POSTS_PER_PAGE),
+  getRankedPosts(),
+  getAllTags(),
+  getNumberOfPages(),
+  getAllBlocksByBlockId(PROFILE_PAGE_ID),
+  getAllBlocksByBlockId(PROFILE_PAGE_ID_EN),
+])
+
+
+export function getStaticPaths() {
+  return [
+    { params: { slug: 'ja' } },
+    { params: { slug: 'en' } },
+  ];
+}
+
+const slug = Astro.params.slug || 'ja';
+
+if (slug !== 'ja' && slug !== 'en') {
+  return Astro.redirect('/ja');
+}
+
+const profileBlocks = slug === 'ja' ? profileJapanesePageBlocks : profileEnglishPageBlocks;
+
+---
+
+<Layout>
+  <div slot="main" class={styles.main}>
+    <div class={styles.profile}>
+      <a href="#Profile"><h1>Profile</h1></a>
+      {slug === 'ja' ? (
+        <a href="/en">Switch to English</a>
+      ) : (
+        <a href="/ja">日本語に切り替え</a>
+      )}
+    </div>
+    <PostBody blocks={profileBlocks} />
+    </div>
+    <a href="#Blog"><h1 class={styles.blogTitle}>Blog</h1></a>
+    {
+      posts.length === 0 ? (
+        <NoContents contents={posts} />
+      ) : (
+        posts.map((post) => (
+          <div class={styles.post} key={post.Slug}>
+            <PostDate post={post} />
+            <PostTags post={post} />
+            <PostTitle post={post} />
+            <PostFeaturedImage post={post} />
+            <PostExcerpt post={post} />
+            <ReadMoreLink post={post} />
+          </div>
+        ))
+      )
+    }
+
+    <footer>
+      <Pagination currentPage={1} numberOfPages={numberOfPages} />
+    </footer>
+  </div>
+
+  <PostSlidebar
+    slot="aside"
+    allPosts={posts}
+    showSameTagPosts={false}
+  />
+
+</Layout>

@@ -20,3 +20,18 @@
   padding: 0;
   border: 0;
 }
+
+.profile {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.blogTitle {
+  margin: 0 auto 20px;
+}
+
+.languageSwitch {
+  margin: 0 auto 20px;
+}

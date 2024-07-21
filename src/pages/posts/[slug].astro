@@ -18,6 +18,7 @@ import {
 } from '../../lib/blog-helpers.ts'
 import Layout from '../../layouts/Layout.astro'
 import PostDate from '../../components/PostDate.astro'
+import PostSlidebar from '../../components/PostSlidebar.astro'
 import PostTags from '../../components/PostTags.astro'
 import PostTitle from '../../components/PostTitle.astro'
 import PostBody from '../../components/PostBody.astro'
@@ -25,6 +26,7 @@ import PostRelativeLink from '../../components/PostRelativeLink.astro'
 import BlogPostsLink from '../../components/BlogPostsLink.astro'
 import BlogTagsLink from '../../components/BlogTagsLink.astro'
 import styles from '../../styles/blog.module.css'
+import PostFeaturedImage from '../../components/PostFeaturedImage.astro'
 
 export async function getStaticPaths() {
   const posts = await getAllPosts()
@@ -104,6 +106,7 @@ if (post.FeaturedImage && post.FeaturedImage.Url) {
       <PostDate post={post} />
       <PostTags post={post} />
       <PostTitle post={post} enableLink={false} />
+      <PostFeaturedImage post={post} />
       <PostBody blocks={blocks} />
       <PostTags post={post} />
 
@@ -113,15 +116,11 @@ if (post.FeaturedImage && post.FeaturedImage.Url) {
     </div>
   </div>
 
-  <div slot="aside" class="aside">
-    <BlogPostsLink
-      heading="Posts in the same category"
-      posts={postsHavingSameTag.filter(
-        (p: interfaces.Post) => p.Slug !== post.Slug
-      )}
-    />
-    <BlogPostsLink heading="Recommended" posts={rankedPosts} />
-    <BlogPostsLink heading="Latest posts" posts={recentPosts} />
-    <BlogTagsLink heading="Categories" tags={tags} />
-  </div>
+  <PostSlidebar
+    slot="aside"
+    allPosts={allPosts}
+    showSameTagPosts={true}
+    currentPost={post}
+    postsHavingSameTag={postsHavingSameTag}
+/>
 </Layout>

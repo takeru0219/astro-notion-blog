@@ -5,10 +5,12 @@ import {
   getAllTags,
   getNumberOfPages,
   getPostsByPage,
+getAllPosts,
 } from '../../../lib/notion/client.ts'
 import Layout from '../../../layouts/Layout.astro'
 import NoContents from '../../../components/NoContents.astro'
 import PostDate from '../../../components/PostDate.astro'
+import PostSlidebar from '../../../components/PostSlidebar.astro'
 import PostTags from '../../../components/PostTags.astro'
 import PostTitle from '../../../components/PostTitle.astro'
 import PostFeaturedImage from '../../../components/PostFeaturedImage.astro'
@@ -31,11 +33,12 @@ export async function getStaticPaths() {
 
 const { page } = Astro.params
 
-const [posts, rankedPosts, tags, numberOfPages] = await Promise.all([
+const [posts, rankedPosts, tags, numberOfPages, allPosts] = await Promise.all([
   getPostsByPage(parseInt(page, 10)),
   getRankedPosts(),
   getAllTags(),
   getNumberOfPages(),
+  getAllPosts(),
 ])
 ---
 
@@ -70,10 +73,11 @@ const [posts, rankedPosts, tags, numberOfPages] = await Promise.all([
     </footer>
   </div>
 
-  <div slot="aside" class={styles.aside}>
-    <BlogPostsLink heading="Recommended" posts={rankedPosts} />
-    <BlogTagsLink heading="Categories" tags={tags} />
-  </div>
+  <PostSlidebar
+    slot="aside"
+    allPosts={posts}
+    showSameTagPosts={false}
+  />
 </Layout>
 
 <style>
