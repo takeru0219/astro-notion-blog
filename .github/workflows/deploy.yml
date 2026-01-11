@@ -2,7 +2,7 @@ name: Deploy
 
 on:
   schedule:
-    - cron: '5 */6 * * *' # UTC ベースで 6 時間ごとに実行
+    - cron: '0 0 * * *' # UTC 0時（日本時間9時）に毎日実行
   workflow_dispatch:
 
 jobs:
