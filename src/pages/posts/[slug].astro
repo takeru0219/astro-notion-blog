@@ -1,13 +1,9 @@
 ---
 import * as interfaces from '../../lib/interfaces.ts'
 import {
-  getPosts,
   getAllPosts,
-  getRankedPosts,
   getPostBySlug,
-  getPostsByTag,
   getBlock,
-  getAllTags,
   getAllBlocksByBlockId,
   downloadFile,
 } from '../../lib/notion/client.ts'
@@ -18,13 +14,10 @@ import {
 } from '../../lib/blog-helpers.ts'
 import Layout from '../../layouts/Layout.astro'
 import PostDate from '../../components/PostDate.astro'
-import PostSlidebar from '../../components/PostSlidebar.astro'
 import PostTags from '../../components/PostTags.astro'
 import PostTitle from '../../components/PostTitle.astro'
 import PostBody from '../../components/PostBody.astro'
 import PostRelativeLink from '../../components/PostRelativeLink.astro'
-import BlogPostsLink from '../../components/BlogPostsLink.astro'
-import BlogTagsLink from '../../components/BlogTagsLink.astro'
 import styles from '../../styles/blog.module.css'
 import PostFeaturedImage from '../../components/PostFeaturedImage.astro'
 
@@ -40,14 +33,10 @@ if (!post) {
   throw new Error('Post not found. slug: ${slug}')
 }
 
-const [blocks, allPosts, rankedPosts, recentPosts, tags, postsHavingSameTag] =
+const [blocks, allPosts] =
   await Promise.all([
     getAllBlocksByBlockId(post.PageId),
     getAllPosts(),
-    getRankedPosts(),
-    getPosts(5),
-    getAllTags(),
-    getPostsByTag(post.Tags[0]?.name, 6),
   ])
 
 const fileAtacchedBlocks = extractTargetBlocks('image', blocks)
@@ -116,11 +105,4 @@ if (post.FeaturedImage && post.FeaturedImage.Url) {
     </div>
   </div>
 
-  <PostSlidebar
-    slot="aside"
-    allPosts={allPosts}
-    showSameTagPosts={true}
-    currentPost={post}
-    postsHavingSameTag={postsHavingSameTag}
-  />
 </Layout>

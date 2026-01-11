@@ -1,32 +1,13 @@
 ---
-import { NUMBER_OF_POSTS_PER_PAGE, PROFILE_PAGE_ID, PROFILE_PAGE_ID_EN } from '../server-constants.ts'
+import { PROFILE_PAGE_ID, PROFILE_PAGE_ID_EN } from '../server-constants.ts'
 import {
-  getPosts,
-  getRankedPosts,
-  getAllTags,
-  getNumberOfPages,
   getAllBlocksByBlockId,
 } from '../lib/notion/client.ts'
 import Layout from '../layouts/Layout.astro'
-import NoContents from '../components/NoContents.astro'
 import PostBody from '../components/PostBody.astro'
-import PostDate from '../components/PostDate.astro'
-import PostTags from '../components/PostTags.astro'
-import PostTitle from '../components/PostTitle.astro'
-import PostSlidebar from '../components/PostSlidebar.astro'
-import PostFeaturedImage from '../components/PostFeaturedImage.astro'
-import PostExcerpt from '../components/PostExcerpt.astro'
-import ReadMoreLink from '../components/ReadMoreLink.astro'
-import Pagination from '../components/Pagination.astro'
-import BlogPostsLink from '../components/BlogPostsLink.astro'
-import BlogTagsLink from '../components/BlogTagsLink.astro'
 import styles from '../styles/blog.module.css'
 
-const [posts, rankedPosts, tags, numberOfPages, profileJapanesePageBlocks, profileEnglishPageBlocks] = await Promise.all([
-  getPosts(NUMBER_OF_POSTS_PER_PAGE),
-  getRankedPosts(),
-  getAllTags(),
-  getNumberOfPages(),
+const [profileJapanesePageBlocks, profileEnglishPageBlocks] = await Promise.all([
   getAllBlocksByBlockId(PROFILE_PAGE_ID),
   getAllBlocksByBlockId(PROFILE_PAGE_ID_EN),
 ])
@@ -62,11 +43,5 @@ const profileBlocks = slug === 'ja' ? profileJapanesePageBlocks : profileEnglish
     <PostBody blocks={profileBlocks} />
     </div>
   </div>
-
-  <PostSlidebar
-    slot="aside"
-    allPosts={posts}
-    showSameTagPosts={false}
-  />
 
 </Layout>
