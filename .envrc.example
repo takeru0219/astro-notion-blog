@@ -1,6 +1,6 @@
 export CUSTOM_DOMAIN=your-domain.com
 export NOTION_API_SECRET=secret_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 export DATABASE_ID=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-export NODE_VERSION=v18.17.1
+export NODE_VERSION=v20.11.0
 export PROFILE_PAGE_ID=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 export PROFILE_PAGE_ID_EN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
