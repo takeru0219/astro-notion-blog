@@ -481,7 +481,10 @@ export async function getDatabase(): Promise<Database> {
         Type: dataSource.icon.type,
         Emoji: dataSource.icon.emoji,
       }
-    } else if (dataSource.icon.type === 'external' && 'external' in dataSource.icon) {
+    } else if (
+      dataSource.icon.type === 'external' &&
+      'external' in dataSource.icon
+    ) {
       icon = {
         Type: dataSource.icon.type,
         Url: dataSource.icon.external?.url || '',
@@ -515,7 +518,9 @@ export async function getDatabase(): Promise<Database> {
   return database
 }
 
-export async function _getDataSource(data_source_id: string): Promise<responses.DataSourceObject> {
+export async function _getDataSource(
+  data_source_id: string
+): Promise<responses.DataSourceObject> {
   const params: requestParams.RetrieveDataSource = {
     data_source_id: data_source_id,
   }
